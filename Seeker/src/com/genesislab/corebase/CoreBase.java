@@ -20,7 +20,7 @@ public class CoreBase {
 		WebDriver unitDriver = new ChromeDriver(options);
 		
 		
-		String userid="https://www.facebook.com/darshana.konara";
+		String userid="https://www.facebook.com/100003585110606";
 		// Declaring and initialising the HtmlUnitWebDriver
 		// HtmlUnitDriver unitDriver = new HtmlUnitDriver(BrowserVersion.CHROME);
 		unitDriver.manage().window().maximize();
