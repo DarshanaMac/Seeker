@@ -8,11 +8,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.testng.annotations.Test;
 
 public class CoreBase {
    
-	@Test
+	@org.junit.Test
 	public void Facebook_Login() {
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("--disable-notifications");

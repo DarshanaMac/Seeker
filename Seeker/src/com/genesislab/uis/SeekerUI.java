@@ -1,29 +1,49 @@
 package com.genesislab.uis;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JTabbedPane;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.border.EtchedBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
+import java.awt.Color;
+import javax.swing.ImageIcon;
+import javax.swing.SwingConstants;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.File;
+import java.net.URL;
+import java.awt.event.ActionEvent;
 
+@SuppressWarnings("serial")
 public class SeekerUI extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-
+	private JTextField txtCSVFilePath;
+	private JTextField txtIDsToFetch;
+	private JTextField txtFBID;
+	public static URL checkedUrl;
+	public String csvFilePath;
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		try {
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			checkedUrl = SeekerUI.class.getResource("/checked.png");
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -43,80 +63,247 @@ public class SeekerUI extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 524, 400);
 		contentPane = new JPanel();
+		contentPane.setBackground(Color.DARK_GRAY);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		JLabel lblDevelopedByGenesislab = new JLabel("Developed by GenesisLab Inc.");
+		lblDevelopedByGenesislab.setForeground(Color.LIGHT_GRAY);
+		lblDevelopedByGenesislab.setFont(new Font("Ubuntu", Font.PLAIN, 10));
+		lblDevelopedByGenesislab.setBounds(180, 341, 147, 14);
+		contentPane.add(lblDevelopedByGenesislab);
+		
 		JLabel lblDataFetcher = new JLabel("Data Fetcher");
+		lblDataFetcher.setForeground(Color.WHITE);
 		lblDataFetcher.setFont(new Font("Tahoma", Font.BOLD, 24));
-		lblDataFetcher.setBounds(173, 21, 161, 40);
+		lblDataFetcher.setBounds(173, 13, 161, 40);
 		contentPane.add(lblDataFetcher);
 		
 		JPanel panel = new JPanel();
+		panel.setBackground(Color.DARK_GRAY);
+		panel.setForeground(Color.WHITE);
 		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panel.setBounds(10, 72, 246, 278);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setVisible(false);
+		lblNewLabel.setIcon(new ImageIcon(checkedUrl));
+		lblNewLabel.setIcon(new ImageIcon("E:\\GenesisLab\\Seeker\\Seeker\\resource\\checked.png"));
+		lblNewLabel.setBounds(208, 42, 21, 30);
+		panel.add(lblNewLabel);
+		
 		JLabel lblUploadCsvFile = new JLabel("Select CSV file containing FB IDs :");
-		lblUploadCsvFile.setBounds(10, 21, 170, 23);
+		lblUploadCsvFile.setFont(new Font("Ubuntu", Font.PLAIN, 12));
+		lblUploadCsvFile.setForeground(Color.WHITE);
+		lblUploadCsvFile.setBounds(12, 46, 213, 23);
 		panel.add(lblUploadCsvFile);
 		
-		JButton btnUpload = new JButton("Upload");
-		btnUpload.setBounds(158, 54, 65, 23);
+		JButton btnSelect = new JButton("Select");
+		btnSelect.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser fileChooser = new JFileChooser();
+				FileNameExtensionFilter csvFileFilter = new FileNameExtensionFilter("CSV File", "csv");
+				fileChooser.setFileFilter(csvFileFilter);
+				fileChooser.setDialogTitle("Choose CSV containing FB IDs");
+				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				if(fileChooser.showOpenDialog(btnSelect) == JFileChooser.APPROVE_OPTION)
+				{
+					File file = fileChooser.getSelectedFile();
+					csvFilePath = file.getAbsolutePath();
+					txtCSVFilePath.setText(csvFilePath);
+					lblNewLabel.setVisible(true);
+				}
+				else
+					JOptionPane.showMessageDialog(null, "No CSV file selected", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		});
+		btnSelect.setFont(new Font("Ubuntu", Font.PLAIN, 12));
+		btnSelect.setBounds(151, 76, 78, 23);
+		panel.add(btnSelect);
+		
+		JButton btnUpload = new JButton("Upload!");
+		btnUpload.setFont(new Font("Ubuntu", Font.PLAIN, 12));
+		btnUpload.setBounds(81, 111, 84, 23);
+		btnUpload.setBorder(new EmptyBorder(0, 0, 0, 0));
 		panel.add(btnUpload);
 		
-		JButton btnSubmit = new JButton("Submit");
-		btnSubmit.setBounds(94, 88, 65, 23);
-		panel.add(btnSubmit);
+		txtCSVFilePath = new JTextField();
+		txtCSVFilePath.setEditable(false);
+		txtCSVFilePath.setBounds(12, 76, 139, 23);
+		txtCSVFilePath.setBorder(new EmptyBorder(0, 0, 0, 0));
+		panel.add(txtCSVFilePath);
+		txtCSVFilePath.setColumns(10);
 		
-		textField = new JTextField();
-		textField.setBounds(20, 55, 139, 20);
-		panel.add(textField);
-		textField.setColumns(10);
 		
-		JLabel lblNumberOfFb = new JLabel("Number of FB IDs Inserted:");
-		lblNumberOfFb.setBounds(20, 161, 139, 14);
-		panel.add(lblNumberOfFb);
 		
-		JLabel label = new JLabel("100");
-		label.setBounds(158, 161, 46, 14);
-		panel.add(label);
+		JLabel lblNumberOfFbIds = new JLabel("Number of FB IDs Inserted:");
+		lblNumberOfFbIds.setFont(new Font("Ubuntu", Font.PLAIN, 12));
+		lblNumberOfFbIds.setForeground(Color.WHITE);
+		lblNumberOfFbIds.setBounds(29, 225, 193, 14);
+		panel.add(lblNumberOfFbIds);
+		
+		JLabel lblUploadedAmount = new JLabel("100");
+		lblUploadedAmount.setFont(new Font("Ubuntu", Font.PLAIN, 12));
+		lblUploadedAmount.setForeground(Color.WHITE);
+		lblUploadedAmount.setBounds(192, 225, 30, 14);
+		panel.add(lblUploadedAmount);
+		
+		JLabel lblImportSuccessful = new JLabel("Import Successful!");
+		lblImportSuccessful.setHorizontalAlignment(SwingConstants.LEFT);
+		lblImportSuccessful.setIcon(new ImageIcon(checkedUrl));
+		//lblImportSuccessful.setIcon(new ImageIcon("E:\\GenesisLab\\Seeker\\Seeker\\Resources\\checked.png"));
+		lblImportSuccessful.setForeground(Color.WHITE);
+		lblImportSuccessful.setFont(new Font("Ubuntu", Font.PLAIN, 12));
+		lblImportSuccessful.setBounds(53, 190, 139, 23);
+		panel.add(lblImportSuccessful);
+		
+		JLabel lblFbIdUpload = new JLabel("FB ID Upload");
+		lblFbIdUpload.setForeground(Color.WHITE);
+		lblFbIdUpload.setFont(new Font("Ubuntu", Font.BOLD, 18));
+		lblFbIdUpload.setBounds(16, 17, 117, 23);
+		panel.add(lblFbIdUpload);
 		
 		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(Color.DARK_GRAY);
 		panel_1.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panel_1.setBounds(252, 72, 246, 278);
 		contentPane.add(panel_1);
 		panel_1.setLayout(null);
 		
 		JLabel lblNoOfIds = new JLabel("No of IDs to be fetched :");
-		lblNoOfIds.setBounds(10, 22, 128, 14);
+		lblNoOfIds.setFont(new Font("Ubuntu", Font.PLAIN, 12));
+		lblNoOfIds.setForeground(Color.WHITE);
+		lblNoOfIds.setBounds(18, 68, 145, 14);
 		panel_1.add(lblNoOfIds);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(134, 19, 65, 20);
-		panel_1.add(textField_1);
-		textField_1.setColumns(10);
+		txtIDsToFetch = new JTextField();
+		txtIDsToFetch.setHorizontalAlignment(SwingConstants.CENTER);
+		txtIDsToFetch.setBounds(162, 66, 62, 20);
+		txtIDsToFetch.setBorder(new EmptyBorder(0, 0, 0, 0));
+		panel_1.add(txtIDsToFetch);
+		txtIDsToFetch.setColumns(10);
 		
 		JButton btnFetch = new JButton("Fetch");
-		btnFetch.setBounds(42, 61, 65, 23);
+		btnFetch.setFont(new Font("Ubuntu", Font.PLAIN, 12));
+		btnFetch.setBounds(42, 107, 65, 23);
+		btnFetch.setBorder(new EmptyBorder(0, 0, 0, 0));
 		panel_1.add(btnFetch);
 		
 		JButton btnViewReport = new JButton("View Report");
-		btnViewReport.setBounds(125, 61, 99, 23);
+		btnViewReport.setFont(new Font("Ubuntu", Font.PLAIN, 12));
+		btnViewReport.setBounds(125, 107, 99, 23);
+		btnViewReport.setBorder(new EmptyBorder(0, 0, 0, 0));
 		panel_1.add(btnViewReport);
 		
 		JLabel lblEnterFbId = new JLabel("Enter FB ID :");
-		lblEnterFbId.setBounds(42, 128, 65, 14);
+		lblEnterFbId.setFont(new Font("Ubuntu", Font.PLAIN, 12));
+		lblEnterFbId.setForeground(Color.WHITE);
+		lblEnterFbId.setBounds(18, 207, 89, 14);
 		panel_1.add(lblEnterFbId);
 		
-		textField_2 = new JTextField();
-		textField_2.setBounds(113, 125, 86, 20);
-		panel_1.add(textField_2);
-		textField_2.setColumns(10);
+		txtFBID = new JTextField();
+		txtFBID.setHorizontalAlignment(SwingConstants.CENTER);
+		txtFBID.setBounds(94, 204, 134, 20);
+		txtFBID.setBorder(new EmptyBorder(0, 0, 0, 0));
+		panel_1.add(txtFBID);
+		txtFBID.setColumns(10);
 		
-		JButton button = new JButton("Fetch");
-		button.setBounds(134, 156, 65, 23);
-		panel_1.add(button);
+		JButton btnFetchSingle = new JButton("Fetch");
+		btnFetchSingle.setFont(new Font("Ubuntu", Font.PLAIN, 12));
+		btnFetchSingle.setBorder(new EmptyBorder(0, 0, 0, 0));
+		btnFetchSingle.setBounds(129, 244, 99, 23);
+		panel_1.add(btnFetchSingle);
+		
+		JLabel lblSingleFetch = new JLabel("Single Fetch");
+		lblSingleFetch.setFont(new Font("Ubuntu", Font.BOLD, 18));
+		lblSingleFetch.setForeground(Color.WHITE);
+		lblSingleFetch.setBounds(18, 159, 117, 23);
+		panel_1.add(lblSingleFetch);
+		
+		JLabel lblBulkFetch = new JLabel("Bulk Fetch");
+		lblBulkFetch.setForeground(Color.WHITE);
+		lblBulkFetch.setFont(new Font("Ubuntu", Font.BOLD, 18));
+		lblBulkFetch.setBounds(18, 20, 117, 23);
+		panel_1.add(lblBulkFetch);
+		
+		JLabel lblResetBulk = new JLabel("");
+		lblResetBulk.setToolTipText("Reset Criterias");
+		lblResetBulk.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				txtIDsToFetch.setText(null);
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				txtIDsToFetch.setText(null);
+			}
+		});
+		lblResetBulk.setIcon(new ImageIcon("E:\\GenesisLab\\Seeker\\Seeker\\resource\\synchronize.png"));
+		lblResetBulk.setBounds(194, 11, 42, 46);
+		panel_1.add(lblResetBulk);
+		
+		JLabel lblNewLabel_1 = new JLabel("");
+		lblNewLabel_1.setToolTipText("Reset Criterias");
+		lblNewLabel_1.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				txtFBID.setText(null);
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_1.setIcon(new ImageIcon("E:\\GenesisLab\\Seeker\\Seeker\\resource\\synchronize.png"));
+		lblNewLabel_1.setBounds(190, 154, 46, 39);
+		panel_1.add(lblNewLabel_1);
 	}
 }
