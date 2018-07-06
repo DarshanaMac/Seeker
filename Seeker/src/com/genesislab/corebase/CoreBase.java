@@ -48,4 +48,10 @@ public class CoreBase {
 		
 		unitDriver.quit();
 	}
+	
+	@org.junit.Test
+	public void initializeFetching()
+	{
+		
+	}
 }

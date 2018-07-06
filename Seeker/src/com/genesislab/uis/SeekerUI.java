@@ -13,6 +13,9 @@ import javax.swing.JOptionPane;
 import java.awt.Font;
 import javax.swing.border.EtchedBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import com.genesislab.corebase.DBConnector;
+
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import java.awt.Color;
@@ -23,6 +26,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.net.URL;
+import java.sql.Connection;
 import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
@@ -34,6 +38,8 @@ public class SeekerUI extends JFrame {
 	private JTextField txtFBID;
 	public static URL checkedUrl;
 	public String csvFilePath;
+	
+	static Connection connection = null;
 	/**
 	 * Launch the application.
 	 */
@@ -41,6 +47,13 @@ public class SeekerUI extends JFrame {
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 			checkedUrl = SeekerUI.class.getResource("/checked.png");
+			//connecting to database
+			connection = DBConnector.dbConnector();
+			if(connection.isValid(0))
+				System.out.println("Database Connection Established");
+			else
+				System.out.println("Database Connection Failed");
+			
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
