@@ -12,10 +12,10 @@ import org.openqa.selenium.chrome.ChromeOptions;
 public class CoreBase {
    
 	@org.junit.Test
-	public void Facebook_Login() {
+	public void Facebook_Login() throws InterruptedException {
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("--disable-notifications");
-		System.setProperty("webdriver.chrome.driver", "C:/chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "E:/GenesisLab/GoogleChromeDriver/chromedriver.exe"); //E:\GenesisLab\Google Chrome Driver
 		WebDriver unitDriver = new ChromeDriver(options);
 		
 		
@@ -40,7 +40,7 @@ public class CoreBase {
 		
 		JavascriptExecutor js=(JavascriptExecutor)unitDriver;
 		js.executeScript("window.open('"+userid+"', '_blank');");
-		
+		unitDriver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 		//double check UI object
 		
 //		WebElement linkabout = unitDriver.findElement(By.xpath("//div[@id='fbTimelineHeadline']/div[2]/ul/li[2]/a"));
